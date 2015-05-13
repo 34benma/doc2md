@@ -1,0 +1,6 @@
+HWPF & XWPF 学习
+
+HWPF is the name of our port of the Microsoft Word 97(-2007) file format to pure Java.
+
+XWPF:The partner to HWPF for the new Word 2007 .docx format is XWPF. 
+
