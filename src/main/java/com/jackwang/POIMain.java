@@ -2,7 +2,9 @@ package com.jackwang;
 
 import com.jackwang.fileutils.FileOperator;
 import com.jackwang.fileutils.MyConfigFactory;
+import com.jackwang.xwpf.Doc2MD;
 
+import java.io.FileInputStream;
 import java.util.HashMap;
 
 /**
@@ -56,6 +58,15 @@ public class POIMain {
         propsPath = "H:\\06_maven_project\\poi\\doc2md\\libs\\doc2md.properties";
         try{
             doc2mdInit();
+            HashMap<String, FileInputStream> fileStreamMap = FileOperator.readFiles();
+            if(!fileStreamMap.isEmpty()) {
+                Doc2MD doc2MDParser = new Doc2MD(fileStreamMap);
+                doc2MDParser.parseDoc();
+            } else {
+                System.out.println("文件集下没有文件流...");
+                return ;
+            }
+
         }catch(Exception e) {
             e.printStackTrace();
         }

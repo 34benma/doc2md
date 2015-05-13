@@ -4,10 +4,7 @@ import com.jackwang.exceptions.POIException;
 
 import java.io.*;
 import java.util.ArrayList;
-<<<<<<< HEAD
 import java.util.HashMap;
-=======
->>>>>>> 7ef3e07f06530bc78afe25f97b14cb9aafd8188f
 
 /**
  * Created by JackWang on 2015/5/10.
@@ -141,11 +138,7 @@ public class FileOperator {
      * @throws POIException
      * @throws FileNotFoundException
      */
-<<<<<<< HEAD
     public static HashMap<String , FileInputStream> readFiles() throws POIException,FileNotFoundException {
-=======
-    public static ArrayList<FileInputStream> readFiles() throws POIException,FileNotFoundException {
->>>>>>> 7ef3e07f06530bc78afe25f97b14cb9aafd8188f
         if(isSingleFile) {
             throw new POIException("单个文件路径必须使用readFile方法读取");
         }
@@ -156,16 +149,14 @@ public class FileOperator {
                 return endsWith(pathname.getName());
             }
         });
-<<<<<<< HEAD
         HashMap<String ,FileInputStream> readedFileList = new HashMap<String, FileInputStream>();
         for(File readFile : files) {
             String fileName = readFile.getName();
-            readedFileList.put(fileName.substring(0,fileName.indexOf(".")),new FileInputStream(readFile));
-=======
-        ArrayList<FileInputStream> readedFileList = new ArrayList<FileInputStream>();
-        for(File readFile : files) {
-            readedFileList.add(new FileInputStream(readFile));
->>>>>>> 7ef3e07f06530bc78afe25f97b14cb9aafd8188f
+            fileName = fileName.substring(0,fileName.indexOf("."));
+            fileName = _writePath + File.separatorChar + fileName + ".md";
+            if(0 != readFile.length()) {
+                readedFileList.put(fileName,new FileInputStream(readFile));
+            }
         }
         return readedFileList;
     }
@@ -189,13 +180,10 @@ public class FileOperator {
         return true;
     }
 
-<<<<<<< HEAD
     public static int getReadFileCount() {
         return readFileCount;
     }
 
-=======
->>>>>>> 7ef3e07f06530bc78afe25f97b14cb9aafd8188f
     /**
      * 判断给定字符串是否符合后缀
      * @param name
@@ -223,11 +211,7 @@ public class FileOperator {
     public static void main(String[] args) {
         try {
             FileOperator.setPath("E:\\01_个人文档\\02_生活");
-<<<<<<< HEAD
             HashMap list = FileOperator.readFiles();
-=======
-            ArrayList list = FileOperator.readFiles();
->>>>>>> 7ef3e07f06530bc78afe25f97b14cb9aafd8188f
             FileInputStream stream = FileOperator.readFile();
             FileOperator.closeFileStream(stream);
         } catch (POIException e) {
@@ -235,9 +219,5 @@ public class FileOperator {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-<<<<<<< HEAD
-=======
-
->>>>>>> 7ef3e07f06530bc78afe25f97b14cb9aafd8188f
     }
 }

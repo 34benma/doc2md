@@ -2,9 +2,14 @@ package com.jackwang.xwpf;
 
 import org.apache.poi.xwpf.usermodel.*;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by JackWang on 2015/5/12.
@@ -72,7 +77,32 @@ public class Doc2MD {
      * @return
      */
     private int countObjects() {
-        return paragraphList.size() + tableList.size() + pictureList.size();
+        return paragraphList.size() + tableList.size() ;
+    }
+
+    public boolean parseDoc() throws Exception {
+        Set<String> keySet = inputDocMap.keySet();
+        for(String title: keySet) {
+            document = readDocument(inputDocMap.get(title));
+            paragraphList = document.getParagraphs();
+            tableList = document.getTables();
+            System.out.println(title + " Creating... ");
+            FileOutputStream fileOut = new FileOutputStream(new File(title));
+            String[] temp2Write = new String[countObjects()];
+
+        }
+        return true;
+    }
+
+    private List<XWPFParagraph> getNotNullParas() {
+        List<XWPFParagraph> tempParags = document.getParagraphs();
+        List<XWPFParagraph> paragraphs = new ArrayList<XWPFParagraph>();
+        for(XWPFParagraph paragraph : tempParags) {
+            if(!("".equals(paragraph.getText()) || null == paragraph.getText())) {
+                paragraphs.add(paragraph);
+            }
+        }
+        return paragraphs;
     }
 
 
