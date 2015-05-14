@@ -80,20 +80,59 @@ public class Doc2MD {
         return paragraphList.size() + tableList.size() ;
     }
 
+    /**
+     * 核心方法，转换Doc
+     * @return
+     * @throws Exception
+     */
     public boolean parseDoc() throws Exception {
         Set<String> keySet = inputDocMap.keySet();
         for(String title: keySet) {
             document = readDocument(inputDocMap.get(title));
-            paragraphList = document.getParagraphs();
-            tableList = document.getTables();
+            paragraphList = document.getParagraphs(); //所有回车行对象
+            tableList = document.getTables();  //所有表格对象
             System.out.println(title + " Creating... ");
             FileOutputStream fileOut = new FileOutputStream(new File(title));
             String[] temp2Write = new String[countObjects()];
-
+            for(int index = 0; index < paragraphList.size(); index++) {
+                XWPFParagraph paragraph = paragraphList.get(index);
+                String tempValue = parseParagraph(paragraph);
+                temp2Write[document.getPosOfParagraph(paragraph)] = tempValue;
+            }
         }
         return true;
     }
 
+    private String parseParagraph(XWPFParagraph paragraph) {
+        if(paragraph.isEmpty()) {
+            return "";
+        }
+        String tempValue = "";
+        String style = paragraph.getStyle();
+        if(style != null) {
+            style.toLowerCase();
+           if("a3".equals(style)) {
+               tempValue += "#";
+           }else if("1".equals(style)) {
+               tempValue += "##";
+           }else if("2".equals(style)) {
+                tempValue += "###";
+           }else if("3".equals(style)) {
+               tempValue += "####";
+           }else if("a4".equals(style)) {
+               tempValue += " + ";
+           }
+        }else {
+
+        }
+        tempValue += paragraph.getParagraphText();
+        return tempValue;
+    }
+
+    /**
+     * 获取所有非空对象
+     * @return
+     */
     private List<XWPFParagraph> getNotNullParas() {
         List<XWPFParagraph> tempParags = document.getParagraphs();
         List<XWPFParagraph> paragraphs = new ArrayList<XWPFParagraph>();
