@@ -10,8 +10,6 @@ Please don't mind my poor english...Thank you!!!<br />
 ##用户使用手册
 ---
 
-[TOC]
-
 ##欢迎使用本软件
 如果你是一个文（dou）艺（bi）青年，喜欢在[简书](http://www.jianshu.com)上写写心情，激扬文字？
 或者你是一个技（zhai）术（nan）爱（fu）好（nv）者，喜欢在[CSDN](http://blog.csdn.net/?ref=toolbar_logo)上发表技术专题？
@@ -87,7 +85,7 @@ git clone https://github.com/34benma/doc2md.git
 
 ##如何运行本软件
 
-#### 目录结构说明：
+####目录结构说明：
 
 .ieda 本软件开发工具为IntelliJ IDEA 14.0.2，因此会有一个.idea隐藏文件夹（如果你不参与开发，可以删掉该文件夹）
 
@@ -97,16 +95,17 @@ doc  本软件开发过程中的文档积累。这里我推荐你根据具体角
 
 doc2md 本软件源码以及运行包
      
-	 如果你仅仅想使用本软件，那么直接进入到/doc2md/out/artifacts/ 目录将doc2md_jar文件夹拷贝出来放到你想放到的目录下即可；
+如果你仅仅想使用本软件，那么直接进入到/doc2md/out/artifacts/ 目录将doc2md_jar文件夹拷贝出来放到你想放到的目录下即可；
 	 
-	 如果你想修改或参与本软件开发，可以使用IntelliJ IDEA工具打开本工程，可以自由修改和增加功能；
+如果你想修改或参与本软件开发，可以使用IntelliJ IDEA工具打开本工程，可以自由修改和增加功能；
 	 
 ####运行本软件
-    进入到doc2md_jar目录，可以看到
+
+进入到doc2md_jar目录，可以看到
 	
-	一个jar包-----------本软件运行包
-	一个log目录---------本软件运行日志，每次使用都会刷新；以日为单位，运行结束后可以删除；
-	doc2md.properties---本软件运行过程中配置目录
+一个jar包-----------本软件运行包
+一个log目录---------本软件运行日志，每次使用都会刷新；以日为单位，运行结束后可以删除；
+doc2md.properties---本软件运行过程中配置目录
 
 ####配置软件运行参数
 
@@ -114,20 +113,20 @@ doc2md 本软件源码以及运行包
 
 根据自己的事情情况修改三个参数
 
-docFilePath=*your path*\\doc2md_jar\\file
+docFilePath=*your path*\\\doc2md_jar\\\file
 
 **注意：为了方便和简单起见，输入输出目录一致，该路径必须存在**
-#注意：路径必须转义，也就是两层目录之间必须要有 \\ ** 
+#注意：路径必须转义，也就是两层目录之间必须要有 \\\
 **强烈要求使用绝对路径**
 
 **文档内图片输出目录,注意，该路径必须存在，否则报错**
-**注意：路径必须转义，也就是两层目录之间必须要有 \\  **
+**注意：路径必须转义，也就是两层目录之间必须要有 \\\
 **强烈要求使用绝对路径**
-imgFilePath=*your path*\\doc2md_jar\\file
+imgFilePath=*your path*\\\doc2md_jar\\\file
 
 **配置是否输出日志**
 **正常情况下可以不用输出，当程序发现bug货出现异常时可以输出日志方便开发人员定位**
-#log=true
+\#log=true
 log=false
 
 ####运行程序
@@ -138,14 +137,14 @@ log=false
 
 **java -jar doc2md.jar**
 
-![Demo 1](/doc/demo1.png)
+![Demo 1](/doc/demo1.PNG)
 
 输入命令后，如果控制台有输出，说明日志开关关闭
 如果没有任何输出，则说明日志开关打开；
 
 ##注意事项
 ####如果出现如下错误
-![Error 1](/doc/path_error.png)
+![Error 1](/doc/path_error.PNG)
 
 则说明文档输入输出或图片输出目录设置有问题
 请检查1. 是否存在  2. 相邻层之间是否使用 \\
