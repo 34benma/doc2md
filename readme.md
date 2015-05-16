@@ -115,7 +115,7 @@ doc2md.properties---本软件运行过程中配置目录<br />
 
 根据自己的事情情况修改三个参数
 
-docFilePath=*your path*\\\doc2md_jar\\\file
+	docFilePath=your path\\doc2md_jar\\file
 
 **注意：为了方便和简单起见，输入输出目录一致，该路径必须存在** <br />
 **注意：路径必须转义，也就是两层目录之间必须要有** \\\   <br />
@@ -124,12 +124,14 @@ docFilePath=*your path*\\\doc2md_jar\\\file
 **文档内图片输出目录,注意，该路径必须存在，否则报错** <br />
 **注意：路径必须转义，也就是两层目录之间必须要有** \\\ <br />
 **强烈要求使用绝对路径** <br />
-imgFilePath=*your path*\\\doc2md_jar\\\file
+
+	imgFilePath=your path\\doc2md_jar\\file
 
 **配置是否输出日志**
 **正常情况下可以不用输出，当程序发现bug货出现异常时可以输出日志方便开发人员定位**<br />
-\#log=true <br />
-log=false
+
+	#log=true
+	log=false
 
 ####运行程序
 
@@ -137,7 +139,7 @@ log=false
 
 在命令行输入如下参数
 
-**java -jar doc2md.jar**
+	java -jar doc2md.jar
 
 ![Demo 1](/doc/demo1.PNG)
 
@@ -149,7 +151,7 @@ log=false
 ![Error 1](/doc/path_error.PNG)
 
 则说明文档输入输出或图片输出目录设置有问题
-请检查1. 是否存在  2. 相邻层之间是否使用 \\
+请检查1. 是否存在  2. 相邻层之间是否使用 \\\
 
 ##如何维护和提交Bug/需求
 ####文件转换失败
