@@ -1,11 +1,9 @@
 package com.jackwang.xwpf;
 
+import com.jackwang.fileutils.FileOperator;
 import org.apache.poi.xwpf.usermodel.*;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,21 +29,29 @@ public class Doc2MD {
      */
     private XWPFDocument document = null;
     /**
-     * 当前文档中所有非空段落行；
+     * 当前文档中所有段落行；
      */
     private List<XWPFParagraph> paragraphList = null;
     /**
-     * 当前文档中所有非空表格对象
+     * 当前文档中所有表格对象
      */
     private List<XWPFTable> tableList = null;
     /**
-     * 当前文档中所有非空图片数目
+     * 当前文档中所有图片数目
      */
-    private List<XWPFPicture> pictureList = null;
+    private List<XWPFPictureData> pictureList = null;
     /**
      * 当前文档中所有超链接
      */
     private XWPFHyperlink[] hyperlinks = null;
+    /**
+     * 当前文档中链接数据，放在一个字符串写入
+     */
+    private int LinksCount = 1;
+    /**
+     * 当前文档图片数据，放在一个字符串写入
+      */
+    private int pictureCount = 1;
 
     /**
      * 多个文件流构造函数
@@ -77,7 +83,7 @@ public class Doc2MD {
      * @return
      */
     private int countObjects() {
-        return paragraphList.size() + tableList.size() ;
+        return paragraphList.size() + tableList.size() + pictureList.size() + LinksCount;
     }
 
     /**
@@ -92,9 +98,11 @@ public class Doc2MD {
             paragraphList = document.getParagraphs(); //所有回车行对象
             tableList = document.getTables();  //所有表格对象
             hyperlinks = document.getHyperlinks(); //所有超链接对象
+            pictureList = document.getAllPictures(); //所有图片对象
             System.out.println(title + " Creating... ");
-            FileOutputStream fileOut = new FileOutputStream(new File(title));
-            String[] temp2Write = new String[countObjects()];
+            int ObjectCount = countObjects();
+            FileWriter fileOut = new FileWriter(new File(title));
+            String[] temp2Write = new String[ObjectCount];
             //处理段落、标题、列表
             for(int index = 0; index < paragraphList.size(); index++) {
                 XWPFParagraph paragraph = paragraphList.get(index);
@@ -107,9 +115,69 @@ public class Doc2MD {
                 String tempValue = parseTable(table);
                 temp2Write[document.getPosOfTable(table)] = tempValue;
             }
+            //处理图片
+            {
+                String tempValue = parsePictures(pictureList);
+                temp2Write[ObjectCount - 2] = tempValue;
+            }
 
+            //处理超链接
+            {
+                String tempValue = parseHyperLinks(hyperlinks);
+                temp2Write[ObjectCount - 1] = tempValue;
+            }
+            FileOperator.writeFile(fileOut,temp2Write);
         }
         return true;
+    }
+
+    /**
+     * 处理图片
+     * @param pictureDatas
+     * @return
+     */
+    private String parsePictures(List<XWPFPictureData> pictureDatas) throws IOException {
+        String tempValue ="<br />**发布前请删除**<br>";
+        if(pictureDatas == null) {
+            return tempValue;
+        }
+        tempValue += "本文档所有图片：<br />";
+        for(int index = 0; index < pictureDatas.size(); index++) {
+            XWPFPictureData pictureData = pictureDatas.get(index);
+            tempValue += (index + 1) + ". ";
+            tempValue += pictureData.getFileName();
+            File imgFile = new File(FileOperator.getImgFilePath() + File.separator + pictureData.getFileName());
+            FileOutputStream outStream = new FileOutputStream(imgFile);
+            try {
+                FileOperator.writeImage(outStream ,pictureData.getData());
+            } finally {
+                FileOperator.closeFileOutStream(outStream);
+            }
+            tempValue += "<br />";
+        }
+        tempValue += "<br />\n手动设置图片，方法：![图片文本](图片地址)<br />**发布前请删除**";
+        return tempValue;
+    }
+
+    /**
+     * 暂时不能识别超链接位置，统一放在文后
+     * @param links
+     * @return
+     */
+    private String parseHyperLinks(XWPFHyperlink[] links) {
+        String tempValue = "";
+        if(links == null) {
+            return tempValue;
+        }
+        tempValue = "<br />**发布前请删除**<br />本文档所有超链接地址：<br />";
+        for (int index = 0; index < links.length; index++) {
+
+            tempValue +=(index + 1) + ". ";
+            tempValue += links[index].getURL();
+            tempValue += "<br />";
+        }
+        tempValue += "<br />需要手动设置超链接，方法：[链接文本](链接地址)<br />**发布前请删除**";
+        return tempValue;
     }
 
     /**
@@ -180,6 +248,4 @@ public class Doc2MD {
         }
         return paragraphs;
     }
-
-
 }

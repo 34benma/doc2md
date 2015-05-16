@@ -50,6 +50,11 @@ public class FileOperator {
     private static int readFileCount = 0;
 
     /**
+     * 文档中图片保存路径，默认和文件读取路径一致
+     */
+    private static String imgFilePath = "";
+
+    /**
      * 设置后缀集
      * @param suffixs 后缀集，以逗号隔开；
      * @throws POIException
@@ -97,6 +102,53 @@ public class FileOperator {
     }
 
     /**
+     * 获取文件读入路径
+     * @return
+     */
+    public static String getReadPath() {
+        return _readPath;
+    }
+
+    /**
+     *  获取文件写入路径
+     * @return
+     */
+    public static String getWritePath() {
+        return _writePath;
+    }
+
+    public static boolean writeImage(FileOutputStream outStream, byte[] b) {
+        try {
+            outStream.write(b);
+            outStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+    /**
+     * 设置图片文件写入路径
+     * @param imgPath
+     */
+    public static void setImgFilePath(String imgPath) {
+        if("".equals(imgFilePath) && !("".equals(_readPath) || _readPath == null) ) {
+            imgFilePath = _readPath;
+            return;
+        }
+        imgFilePath = imgPath;
+        return;
+    }
+
+    /**
+     * 获取图片文件写入路径
+     * @return
+     */
+    public static String getImgFilePath() {
+        return imgFilePath;
+    }
+
+    /**
      * 读取指定后缀的单个文件
      * 如果没有指定后缀，默认读取docx后缀
      * 注意：读取到文件流之后记得调用closeFileStream方法关闭文件流
@@ -113,13 +165,29 @@ public class FileOperator {
         readFileCount ++;
         return new FileInputStream(_readPath);
     }
-
     /**
-     * 关闭文件流
+     * 关闭文件输入流
      * @param stream
      * @return
      */
-    public static boolean closeFileStream(InputStream stream) {
+    public static boolean closeFileInputStream(FileInputStream stream) {
+        if(null == stream) {
+            return true;
+        }
+        try {
+            stream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+    /**
+     * 关闭文件输出流
+     * @param stream
+     * @return
+     */
+    public static boolean closeFileOutStream(FileOutputStream stream) {
         if(null == stream) {
             return true;
         }
@@ -180,6 +248,23 @@ public class FileOperator {
         return true;
     }
 
+    /**
+     * 关闭文件流
+     * @param stream
+     * @return
+     */
+    public static boolean closeFileWriter(FileWriter stream) {
+        if(null == stream) {
+            return true;
+        }
+        try {
+            stream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
     public static int getReadFileCount() {
         return readFileCount;
     }
@@ -202,8 +287,23 @@ public class FileOperator {
         return false;
     }
 
-
-
+    /**
+     * 文件写入
+     * @param stream
+     * @param data
+     * @return
+     */
+    public static boolean writeFile(FileWriter stream, String[] data) throws IOException {
+        for(String str:data) {
+            if("".equals(str) || str == null) {
+                continue;
+            }
+            stream.write(str);
+            stream.write("\n\n");
+        }
+        FileOperator.closeFileWriter(stream);
+        return true;
+    }
     /**
      * 单元测试类，暂时没有搭建Junit框架进行单元测试，使用Main函数代替
      * @param args
@@ -213,7 +313,7 @@ public class FileOperator {
             FileOperator.setPath("E:\\01_个人文档\\02_生活");
             HashMap list = FileOperator.readFiles();
             FileInputStream stream = FileOperator.readFile();
-            FileOperator.closeFileStream(stream);
+            FileOperator.closeFileInputStream(stream);
         } catch (POIException e) {
             e.printStackTrace();
         } catch (FileNotFoundException e) {

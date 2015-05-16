@@ -4,7 +4,9 @@ import com.jackwang.fileutils.FileOperator;
 import com.jackwang.fileutils.MyConfigFactory;
 import com.jackwang.xwpf.Doc2MD;
 
-import java.io.FileInputStream;
+import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -40,22 +42,41 @@ public class POIMain {
 //        String suffixs = propsMap.get("suffixList");
         String docFilePath = propsMap.get("docFilePath");
 
-        if(!("".equals(suffix) && suffix == null)) {
+        if(!("".equals(suffix) || suffix == null)) {
             FileOperator.setSuffix(suffix);
         }else {
             System.out.println("后缀设置为空，将使用默认配置：docx");
         }
-        if(!("".equals(docFilePath) && docFilePath == null)) {
+        if(!("".equals(docFilePath) || docFilePath == null)) {
             FileOperator.setPath(docFilePath);
         }else {
             System.out.println("输入输出路径设置为空...");
             return false;
         }
+        String imgFilePath = propsMap.get("imgFilePath");
+        if("".equals(imgFilePath) || imgFilePath == null) {
+            System.out.println("图片写入路径将使用默认值...");
+            return true;
+        }else{
+            FileOperator.setImgFilePath(imgFilePath);
+        }
         return true;
     }
 
-    public static void main(String[] args) {
-        propsPath = "H:\\06_maven_project\\poi\\doc2md\\libs\\doc2md.properties";
+    public static void main(String[] args) throws FileNotFoundException {
+        String execuPath = POIMain.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+//        propsPath = "H:\\06_maven_project\\poi\\doc2md\\libs\\doc2md.properties";
+        execuPath += File.separator + ".." + File.separator;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String dateTime = dateFormat.format(new Date());
+        String logFilePath = execuPath + "log" + File.separator + dateTime + ".log";
+        PrintStream printStream1 = new PrintStream(new FileOutputStream(new File(logFilePath)));
+//        PrintStream printStream2 = new PrintStream(System.out);
+        System.setOut(printStream1);
+//        System.setOut(printStream2);
+        propsPath = execuPath + "doc2md.properties";
+
+        System.out.println("属性文件路径:" + propsPath);
         try{
             doc2mdInit();
             HashMap<String, FileInputStream> fileStreamMap = FileOperator.readFiles();
