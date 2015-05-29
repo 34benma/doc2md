@@ -28,6 +28,10 @@ public class POIMain {
      */
     private static HashMap<String,String> propsMap = null;
     /**
+     * 控制日志功能
+     */
+    private static boolean log = false;
+    /**
      * 初始化配置文件读取
      * 将配置属性读入HashMap中
      */
@@ -60,6 +64,13 @@ public class POIMain {
         }else{
             FileOperator.setImgFilePath(imgFilePath);
         }
+        String isLog = propsMap.get("log");
+        if(!("true".equals(isLog))) {
+            log = false;
+            System.out.println("日志开关关闭，将输出到控制台...");
+        }else {
+            log = true;
+        }
         return true;
     }
 
@@ -67,13 +78,15 @@ public class POIMain {
         String execuPath = POIMain.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 //        propsPath = "H:\\06_maven_project\\poi\\doc2md\\libs\\doc2md.properties";
         execuPath += File.separator + ".." + File.separator;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String dateTime = dateFormat.format(new Date());
-        String logFilePath = execuPath + "log" + File.separator + dateTime + ".log";
-        PrintStream printStream1 = new PrintStream(new FileOutputStream(new File(logFilePath)));
-//        PrintStream printStream2 = new PrintStream(System.out);
-        System.setOut(printStream1);
-//        System.setOut(printStream2);
+        PrintStream printStream2 = new PrintStream(System.out);
+        if(log) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String dateTime = dateFormat.format(new Date());
+            String logFilePath = execuPath + "log" + File.separator + dateTime + ".log";
+            PrintStream printStream1 = new PrintStream(new FileOutputStream(new File(logFilePath)));
+            System.setOut(printStream1);
+        }
+        System.setOut(printStream2);
         propsPath = execuPath + "doc2md.properties";
 
         System.out.println("属性文件路径:" + propsPath);
