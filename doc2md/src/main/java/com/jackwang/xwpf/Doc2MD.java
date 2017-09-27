@@ -227,13 +227,13 @@ public class Doc2MD {
         if(style != null) {
             style.toLowerCase();
            if("a3".equals(style)) {
-               tempValue += "#";
+               tempValue += "# ";
            }else if("1".equals(style)) {
-               tempValue += "##";
+               tempValue += "## ";
            }else if("2".equals(style)) {
-                tempValue += "###";
+                tempValue += "### ";
            }else if("3".equals(style)) {
-               tempValue += "####";
+               tempValue += "#### ";
            }else if("a4".equals(style)) {
                tempValue += " + ";
            }
