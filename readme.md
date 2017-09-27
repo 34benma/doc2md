@@ -6,8 +6,8 @@ Please don't mind my poor english...Thank you!!!<br />
 请忽略本人蹩脚的英语,谢谢！
 <br />
 ---
-#User Manual
-##用户使用手册
+# User Manual
+## 用户使用手册
 ---
 
 ##欢迎使用本软件
