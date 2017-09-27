@@ -196,10 +196,20 @@ public class Doc2MD {
             tempValue += "<tr>";
             List<XWPFTableCell> CellList = row.getTableCells();
             for(XWPFTableCell cell : CellList) {
-                tempValue += "<th>";
-                tempValue += cell.getText();
+                if (index != 0) {
+                    tempValue += "<td>";
+                    tempValue += cell.getText();
+                    tempValue += "</td>";
+                } else {
+                    tempValue += "<th>";
+                    tempValue += cell.getText();
+                    tempValue += "</th>";
+                }
+
             }
+            tempValue += "</tr>";
         }
+        tempValue += "</table>";
         return tempValue;
     }
 
